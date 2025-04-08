@@ -25,7 +25,11 @@ namespace Concessionaire.WebAPI.Controllers
         public IActionResult GetById(int id)
         {
             var car = this.carsRepository.GetById(id);
-            if(car != null)
+
+            //descargar el archivo de la url
+            
+
+            if (car != null)
             {
                 return Ok(car);
             }

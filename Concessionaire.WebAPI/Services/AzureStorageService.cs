@@ -28,12 +28,30 @@ namespace Concessionaire.WebAPI.Services
             }
         }
 
+        public async Task<string> DownloadAsync(ContainerEnum container, string blobFilename)
+        {
+            var filebase64="";
+            var containerName = container.ToString().ToLowerInvariant();
+            var blobContainerClient = new BlobContainerClient(this.azureStorageConnectionString, containerName);
+            var blobClient = blobContainerClient.GetBlobClient(blobFilename);
+
+
+            // Descargar el archivo a un MemoryStream
+            using (var memoryStream = new MemoryStream())
+            {
+                var archivo = await blobClient.DownloadContentAsync();             // Convertir el archivo a base64
+                
+            }
+
+            return filebase64;
+        }
+
         public async Task<string> UploadAsync(IFormFile file, ContainerEnum container, string blobName = null)
         {
             if (file.Length == 0) return null;
 
             var containerName = Enum.GetName(typeof(ContainerEnum), container).ToLower();
-            
+
             var blobContainerClient = new BlobContainerClient(this.azureStorageConnectionString, containerName);
 
             // Get a reference to the blob just uploaded from the API in a container from configuration settings
@@ -74,5 +92,8 @@ namespace Concessionaire.WebAPI.Services
         /// <param name="container">Container where to delete the file</param>
         /// <param name="blobFilename">Filename</param>
         Task DeleteAsync(ContainerEnum container, string blobFilename);
+
+        // DownloadAsync method
+        Task<string> DownloadAsync(ContainerEnum container, string blobFilename);
     }
 }

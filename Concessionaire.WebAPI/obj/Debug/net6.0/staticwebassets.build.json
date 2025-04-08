@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "/OiPbKMmAPrt6sh0jxjnEpL8yEvl/kBzcBJTmbMsEIA=",
+  "Hash": "gdMl0/sgK7J+xSwMgYFY7jnFw+i7l4yPcfBtiO73rlE=",
   "Source": "Concessionaire.WebAPI",
   "BasePath": "_content/Concessionaire.WebAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

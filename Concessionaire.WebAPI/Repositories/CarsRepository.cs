@@ -1,4 +1,5 @@
 ﻿using Concessionaire.WebAPI.Contexts;
+using Concessionaire.WebAPI.Dto;
 using Concessionaire.WebAPI.Entities;
 using Concessionaire.WebAPI.Enums;
 using Concessionaire.WebAPI.Requests;
@@ -46,9 +47,33 @@ namespace Concessionaire.WebAPI.Repositories
             return this.context.Cars.ToList();
         }
 
-        public Car GetById(int id)
+    
+
+        public async Task<CarDto> GetById(int id)
         {
-            return this.context.Cars.Find(id);
+            var car= this.context.Cars.Find(id);
+            //descargar el archivo de la url segun TechnicalDataSheetPath
+            if (car == null)
+            {
+                return null;
+            }
+            var file = await this.azureStorageService.DownloadAsync(ContainerEnum.IMAGES, car.TechnicalDataSheetPath);
+            
+
+            var resultData= new CarDto()
+            {
+                Id = car.Id,
+                Brand = car.Brand,
+                Model = car.Model,
+                Year = car.Year,
+                ImagePath = car.ImagePath,
+                TechnicalDataSheetPath = car.TechnicalDataSheetPath,
+                ImageBase64 = file
+
+            };
+
+
+            return resultData;
         }
 
         public async Task RemoveByIdAsync(int id)
@@ -101,7 +126,7 @@ namespace Concessionaire.WebAPI.Repositories
     public interface ICarsRepository
     {
         List<Car> GetAll();
-        Car GetById(int id);
+        Task<CarDto> GetById(int id);
         Task<Car> AddAsync(CarRequest request);
         Task<Car> UpdateAsync(int id, CarRequest request);
         Task RemoveByIdAsync(int id);
